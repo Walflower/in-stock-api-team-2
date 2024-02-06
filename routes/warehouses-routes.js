@@ -8,5 +8,5 @@ router
 
 router.route("/:id").get(warehousesController.findOne);
 
-// need get,post(add),patch(edit),delete
+// needs .get .post(add) .patch(edit)/.put .delete
 module.exports = router;

@@ -32,7 +32,7 @@ const findOne = async (req, res) => {
   }
 };
 
-//to add a warehouse
+//to add a new warehouse
 const add = async (req, res) => {
   if (
     !req.body.warehouse_name ||
