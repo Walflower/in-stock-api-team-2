@@ -1,6 +1,6 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
-require("dotenv").config();
 const cors = require("cors");
 const PORT = process.env.DB_PORT || 8000;
 const BASE_PATH = process.env.BASE_PATH;
