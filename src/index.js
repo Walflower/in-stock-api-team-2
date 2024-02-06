@@ -3,7 +3,7 @@ const app = express();
 require("dotenv").config();
 const cors = require("cors");
 const PORT = process.env.DB_PORT || 8000;
-const { BASE_PATH } = process.env.BASE_PATH;
+const BASE_PATH = process.env.BASE_PATH;
 
 app.use(express.json());
 app.use(cors());
