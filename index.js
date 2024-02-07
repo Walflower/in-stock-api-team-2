@@ -21,4 +21,5 @@ app.use("/", (req, res, next) => {
 app.use("/warehouses", warehouses);
 app.use("/inventories", inventories);
 
+
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
