@@ -11,7 +11,7 @@ const inventories = require("./routes/inventories-routes");
 app.use(express.json());
 app.use(cors());
 
-//Here just so we can see when the client is hitting the api. Can remove later!
+//Here just so we can see when the client is hitting the api. Can remove later, TODO!
 app.use("/", (req, res, next) => {
   console.log(req.url);
   console.log("time", Date.now());
