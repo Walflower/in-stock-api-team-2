@@ -13,7 +13,7 @@
 //   getInventories,
 // };
 
-
+ 
 const knex = require("knex")(require("../knexfile"));
 
 const getInventories = async (_req, res) => {
