@@ -65,6 +65,24 @@ const add = async (req, res) => {
   }
 };
 
+// route "/warehouses/:id/inventories"
+// router.route("/:id/inventories").get(warehousesController.warehouseInventory);
+
+
+
+const warehouseInventory = async (req, res) => {
+  try {
+    const warehouseInventoryFound = await knex("inventories").where({
+      warehouse_id: req.params.id,
+    });
+
+    res.status(200).json(warehouseInventoryFound);
+  } catch (error) {
+    res
+      .status(404)
+      .send(`inventory for selected warehouse ${req.params.id} not found`);
+  }
+};
 //to edit a warehouse
 
 //to delete a warehouse
@@ -73,4 +91,5 @@ module.exports = {
   getWarehouses,
   findOne,
   add,
+  warehouseInventory
 };
