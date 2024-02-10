@@ -65,9 +65,7 @@ const add = async (req, res) => {
   }
 };
 
-//to edit a warehouse
 
-//to delete a warehouse
 
 module.exports = {
   getWarehouses,
