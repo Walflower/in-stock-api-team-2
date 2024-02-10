@@ -137,7 +137,7 @@ const update = async (req, res) => {
         .json({ message: "Warehouse with the provided ID does not exist" });
     }
 
-    if (typeof req.body.quantity !== "number") {
+    if (isNaN(quantity)) {
       return res.status(400).json({ message: "Quantity must be a number" });
     }
 
