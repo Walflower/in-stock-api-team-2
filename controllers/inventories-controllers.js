@@ -128,5 +128,4 @@ module.exports = {
   getInventories,
   createInventoryItem,
   getOne,
-  remove,
 };
