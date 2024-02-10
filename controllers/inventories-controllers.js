@@ -13,14 +13,15 @@ const getInventories = async (_req, res) => {
         "inventories.warehouse_id",
         "warehouses.warehouse_name"
       )
-      .innerJoin("warehouses", "inventories.warehouse_id", "warehouses.id");
+      .innerJoin("warehouses", "inventories.warehouse_id", "warehouses.id")
+      .orderBy("id");
     res.status(200).json(data);
   } catch (err) {
     res.status(400).send(`Error retrieving inventories: ${err}`);
   }
 };
 
-//post/create new inventory item
+
 
 const createInventoryItem = async (req, res) => {
   const { warehouse_id, item_name, description, category, status, quantity } =
@@ -50,7 +51,7 @@ const createInventoryItem = async (req, res) => {
         .json({ message: "Warehouse with the provided ID does not exist" });
     }
 
-    if (isNaN(req.body.quantity)) {
+    if (typeof req.body.quantity !== "number") {
       return res.status(400).json({ message: "Quantity must be a number" });
     }
 
@@ -60,15 +61,13 @@ const createInventoryItem = async (req, res) => {
       description,
       category,
       status,
-      quantity: parseInt(quantity),
+      quantity,
     };
 
-    // Insert new inventory item into the database
     const [newInventoryItemId] = await knex("inventories").insert(
       newInventoryItem
     );
 
-    // Fetch the inserted inventory item
     const newInventoryItemCreated = await knex("inventories")
       .where("id", newInventoryItemId)
       .first();
