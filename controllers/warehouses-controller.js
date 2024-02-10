@@ -70,26 +70,45 @@ const add = async (req, res) => {
 //to edit a warehouse
 const update = async (req, res) => {
   try {
-    const warehouseDeleted = await knex("warehouse")
-      .where({id: req.params.id})
-      .update(req.body)
+    const {id, warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email} = req.body
+    if(!id || !warehouse_name || !address || !city || !country || !contact_name || !contact_position || !contact_phone || !contact_email){
+      return res.status(400).json({
+        message: 'Please ensure that all inputs are complete, even those that will remain the same'
+    })
+    }
 
-      if (warehouseDeleted === 0) {
+    const updatedWarehouse = await knex("warehouse")
+    .where({id: req.params.id})
+    .update({
+      id, warehouse_name, 
+      address, 
+      city, 
+      country, 
+      contact_name, 
+      contact_position, 
+      contact_phone, 
+      contact_email})
+
+      if (updatedWarehouse === 0) {
         return res.status(404).json({
-          message: `User with ID ${req.params.id} not found`
+          message: 'Warehouse not found'
         })
       }
-      const updatedWarehouse = await knex("warehouse")
-      .where({
-        id: req.params.id
-      })
-      res.json(updatedWarehouse[0])
-  } catch (error) {
-    res.status(500).json({
-      message: `Unable to update user with ID ${req.params.id}`
+
+      const newWarehouse = await knex("warehouse")
+      .where({id: req.params.id})
+      .first()
+
+      res.status(200).json(updatedWarehouse)
+    
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({
+      message: 'Unable to update selected warehouse'
     })
   }
 }
+
 //to get the inventory list of a given warehouse
 const warehouseInventory = async (req, res) => {
   try {
