@@ -86,5 +86,9 @@ module.exports = {
   getWarehouses,
   findOne,
   add,
+<<<<<<< HEAD
   warehouseInventory,
+=======
+  warehouseInventory
+>>>>>>> develop
 };
