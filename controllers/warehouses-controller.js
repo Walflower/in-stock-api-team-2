@@ -68,46 +68,46 @@ const add = async (req, res) => {
 };
 
 //to edit a warehouse
-const update = async (req, res) => {
+const edit = async (req, res) => {
   try {
-    const {id, warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email} = req.body
-    if(!id || !warehouse_name || !address || !city || !country || !contact_name || !contact_position || !contact_phone || !contact_email){
+    const {warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email} = req.body
+    const id = parseInt(req.params.id)
+
+    if(!warehouse_name || !address || !city || !country || !contact_name || !contact_position || !contact_phone || !contact_email){
       return res.status(400).json({
         message: 'Please ensure that all inputs are complete, even those that will remain the same'
     })
     }
 
-    const updatedWarehouse = await knex("warehouse")
-    .where({id: req.params.id})
-    .update({
-      id, warehouse_name, 
-      address, 
-      city, 
-      country, 
-      contact_name, 
-      contact_position, 
-      contact_phone, 
-      contact_email})
-
-      if (updatedWarehouse === 0) {
-        return res.status(404).json({
-          message: 'Warehouse not found'
+    let existingWarehouse = await knex("warehouses").where({id}).first()
+    if(!existingWarehouse) {
+      await knex('warehouses').insert({id, warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email})
+      existingWarehouse = {id, warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email}
+      return res.status(200).json(existingWarehouse)
+    } else {
+      await knex('warehouses').where({id}).update({
+          warehouse_name, 
+          address, 
+          city, 
+          country, 
+          contact_name, 
+          contact_position, 
+          contact_phone, 
+          contact_email
         })
       }
 
-      const newWarehouse = await knex("warehouse")
-      .where({id: req.params.id})
-      .first()
-
-      res.status(200).json(updatedWarehouse)
+  res.status(200).json(existingWarehouse)
     
-    } catch (error) {
-      console.error(error)
-      res.status(500).json({
-      message: 'Unable to update selected warehouse'
+  } catch (error) {
+    console.error('Error updating warehouse:', error)
+    res.status(500).json({
+    message: 'Unable to update selected warehouse'
     })
   }
 }
+
+
 
 //to get the inventory list of a given warehouse
 const warehouseInventory = async (req, res) => {
@@ -130,6 +130,6 @@ module.exports = {
   getWarehouses,
   findOne,
   add,
-  update,
+  edit,
   warehouseInventory,
 };
