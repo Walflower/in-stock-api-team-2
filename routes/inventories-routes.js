@@ -5,5 +5,10 @@ router
   .route("/")
   .get(inventoriesController.getInventories)
   .post(inventoriesController.createInventoryItem);
+    
+
+router
+    .route("/:id")
+    .get(inventoriesController.getOne)
 
 module.exports = router;

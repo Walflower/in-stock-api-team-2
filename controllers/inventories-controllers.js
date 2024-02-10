@@ -21,8 +21,29 @@ const getInventories = async (_req, res) => {
   }
 };
 
+//to get a single inventory item
+const getOne = async (req, res) => {
+  try {
+    const inventoryItemFound = await knex("inventories").where({
+      id: req.params.id,
+    });
 
+    if (inventoryItemFound.length === 0) {
+      return res.status(404).json({
+        message: `Warehouse with ID ${req.params.id} not found`,
+      });
+    }
 
+    const inventoryData = inventoryItemFound[0];
+    res.json(inventoryData);
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to retrieve inventory item with ID ${req.params.id}`,
+    });
+  }
+};
+
+//to post a new inventory item
 const createInventoryItem = async (req, res) => {
   const { warehouse_id, item_name, description, category, status, quantity } =
     req.body;
@@ -83,4 +104,5 @@ const createInventoryItem = async (req, res) => {
 module.exports = {
   getInventories,
   createInventoryItem,
+  getOne
 };
