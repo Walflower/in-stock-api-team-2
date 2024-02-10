@@ -3,7 +3,6 @@ const app = express();
 require("dotenv").config();
 const cors = require("cors");
 const PORT = process.env.PORT || 8000;
-// const { BASE_PATH } = process.env;
 const warehouses = require("./routes/warehouses-routes");
 const inventories = require("./routes/inventories-routes");
 
@@ -20,6 +19,5 @@ app.use("/", (req, res, next) => {
 
 app.use("/warehouses", warehouses);
 app.use("/inventories", inventories);
-
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
