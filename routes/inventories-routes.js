@@ -10,5 +10,6 @@ router
 router
     .route("/:id")
     .get(inventoriesController.getOne)
+    .delete(inventoriesController.remove);
 
 module.exports = router;
