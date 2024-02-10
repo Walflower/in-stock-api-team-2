@@ -1,3 +1,5 @@
+const { resolve4 } = require("dns");
+
 const knex = require("knex")(require("../knexfile"));
 
 //to get list of warehouses
@@ -66,6 +68,28 @@ const add = async (req, res) => {
 };
 
 //to edit a warehouse
+const update = async (req, res) => {
+  try {
+    const warehouseDeleted = await knex("warehouse")
+      .where({id: req.params.id})
+      .update(req.body)
+
+      if (warehouseDeleted === 0) {
+        return res.status(404).json({
+          message: `User with ID ${req.params.id} not found`
+        })
+      }
+      const updatedWarehouse = await knex("warehouse")
+      .where({
+        id: req.params.id
+      })
+      res.json(updatedWarehouse[0])
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to update user with ID ${req.params.id}`
+    })
+  }
+}
 
 //to delete a warehouse
 
@@ -73,4 +97,5 @@ module.exports = {
   getWarehouses,
   findOne,
   add,
+  update,
 };
