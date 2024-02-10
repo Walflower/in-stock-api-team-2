@@ -5,7 +5,19 @@ const knex = require("knex")(require("../knexfile"));
 //to get list of warehouses
 const getWarehouses = async (_req, res) => {
   try {
-    const data = await knex("warehouses");
+    const data = await knex("warehouses")
+      .select(
+        "warehouses.id",
+        "warehouses.warehouse_name",
+        "warehouses.address",
+        "warehouses.city",
+        "warehouses.country",
+        "warehouses.contact_name",
+        "warehouses.contact_position",
+        "warehouses.contact_email"
+      )
+      .innerJoin("inventories", "inventories.warehouse_id", "inventories.id")
+      .orderBy("id");
     res.status(200).json(data);
   } catch (err) {
     res.status(400).send(`Error retrieving warehouses: ${err}`);
@@ -70,44 +82,80 @@ const add = async (req, res) => {
 //to edit a warehouse
 const edit = async (req, res) => {
   try {
-    const {warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email} = req.body
-    const id = parseInt(req.params.id)
+    const {
+      warehouse_name,
+      address,
+      city,
+      country,
+      contact_name,
+      contact_position,
+      contact_phone,
+      contact_email,
+    } = req.body;
+    const id = parseInt(req.params.id);
 
-    if(!warehouse_name || !address || !city || !country || !contact_name || !contact_position || !contact_phone || !contact_email){
+    if (
+      !warehouse_name ||
+      !address ||
+      !city ||
+      !country ||
+      !contact_name ||
+      !contact_position ||
+      !contact_phone ||
+      !contact_email
+    ) {
       return res.status(400).json({
-        message: 'Please ensure that all inputs are complete, even those that will remain the same'
-    })
+        message:
+          "Please ensure that all inputs are complete, even those that will remain the same",
+      });
     }
 
-    let existingWarehouse = await knex("warehouses").where({id}).first()
-    if(!existingWarehouse) {
-      await knex('warehouses').insert({id, warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email})
-      existingWarehouse = {id, warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email}
-      return res.status(200).json(existingWarehouse)
+    let existingWarehouse = await knex("warehouses").where({ id }).first();
+    if (!existingWarehouse) {
+      await knex("warehouses").insert({
+        id,
+        warehouse_name,
+        address,
+        city,
+        country,
+        contact_name,
+        contact_position,
+        contact_phone,
+        contact_email,
+      });
+      existingWarehouse = {
+        id,
+        warehouse_name,
+        address,
+        city,
+        country,
+        contact_name,
+        contact_position,
+        contact_phone,
+        contact_email,
+      };
+      return res.status(200).json(existingWarehouse);
     } else {
-      await knex('warehouses').where({id}).update({
-          warehouse_name, 
-          address, 
-          city, 
-          country, 
-          contact_name, 
-          contact_position, 
-          contact_phone, 
-          contact_email
-        })
-      }
+      await knex("warehouses").where({ id }).update({
+        warehouse_name,
+        address,
+        city,
+        country,
+        contact_name,
+        contact_position,
+        contact_phone,
+        contact_email,
+      });
+    }
 
-  res.status(200).json(existingWarehouse)
-    
+    res.status(200).json(existingWarehouse);
   } catch (error) {
-    console.error('Error updating warehouse:', error)
+    console.error("Error updating warehouse:", error);
     res.status(500).json({
-    message: 'Unable to update selected warehouse'
-    })
+      message: "Unable to update selected warehouse",
+    });
   }
-}
-
-
+};
 
 //to get the inventory list of a given warehouse
 const warehouseInventory = async (req, res) => {
