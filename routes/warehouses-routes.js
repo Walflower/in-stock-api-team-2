@@ -6,6 +6,10 @@ router
   .get(warehousesController.getWarehouses)
   .post(warehousesController.add);
 
+router
+  .route("/:id")
+  .get(warehousesController.findOne)
+  .delete(warehousesController.remove)
 router.
   route("/:id")
   .get(warehousesController.findOne)
