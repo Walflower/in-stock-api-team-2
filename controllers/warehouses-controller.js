@@ -14,6 +14,7 @@ const getWarehouses = async (_req, res) => {
         "warehouses.country",
         "warehouses.contact_name",
         "warehouses.contact_position",
+        "warehouses.contact_phone",
         "warehouses.contact_email"
       )
       .innerJoin("inventories", "inventories.warehouse_id", "inventories.id")
@@ -48,15 +49,25 @@ const findOne = async (req, res) => {
 
 //to add a new warehouse
 const add = async (req, res) => {
+  const {
+    warehouse_name,
+    address,
+    city,
+    country,
+    contact_name,
+    contact_position,
+    contact_phone,
+    contact_email,
+  } = req.body;
   if (
-    !req.body.warehouse_name ||
-    !req.body.address ||
-    !req.body.city ||
-    !req.body.country ||
-    !req.body.contact_name ||
-    !req.body.contact_position ||
-    !req.body.contract_phone ||
-    !req.body.contact_email
+    !warehouse_name ||
+    !address ||
+    !city ||
+    !country ||
+    !contact_name ||
+    !contact_position ||
+    !contact_phone ||
+    !contact_email
   ) {
     return res.status(400).json({
       message: "Please filled in all the required information",
@@ -64,13 +75,36 @@ const add = async (req, res) => {
   }
 
   try {
-    const result = await knex("warehouses").insert(req.body);
+    if (
+      !/^(\+\d{1,3}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(
+        req.body.contact_phone
+      )
+    ) {
+      return res
+        .status(400)
+        .json({ message: "You've entered an invalid phone number" });
+    }
+    if (!/\S+@\S+\.\S+/.test(req.body.contact_email)) {
+      return res
+        .status(400)
+        .json({ message: "You've entered an invalid email address" });
+    }
 
-    const newWarehouseId = result[0];
-    const createdWarehouse = await knex("warehouses").where({
-      id: newWarehouseId,
-    });
+    const newWarehouse = {
+      warehouse_name,
+      address,
+      city,
+      country,
+      contact_name,
+      contact_position,
+      contact_phone,
+      contact_email,
+    };
+    const [newWarehouseId] = await knex("warehouses").insert(newWarehouse);
 
+    const createdWarehouse = await knex("warehouses")
+      .where("id", newWarehouseId)
+      .first();
     res.status(201).json(createdWarehouse);
   } catch (error) {
     res.status(500).json({
