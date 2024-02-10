@@ -90,12 +90,27 @@ const update = async (req, res) => {
     })
   }
 }
+//to get the inventory list of a given warehouse
+const warehouseInventory = async (req, res) => {
+  try {
+    const warehouseInventoryFound = await knex("inventories")
+      .select("id", "item_name", "category", "status", "quantity")
+      .where({
+        warehouse_id: req.params.id,
+      });
 
-//to delete a warehouse
+    res.status(200).json(warehouseInventoryFound);
+  } catch (error) {
+    res
+      .status(404)
+      .send(`inventory for selected warehouse ${req.params.id} not found`);
+  }
+};
 
 module.exports = {
   getWarehouses,
   findOne,
   add,
   update,
+  warehouseInventory,
 };
