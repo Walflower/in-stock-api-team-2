@@ -104,5 +104,5 @@ const createInventoryItem = async (req, res) => {
 module.exports = {
   getInventories,
   createInventoryItem,
-  getOne
+  getOne,
 };
