@@ -65,16 +65,14 @@ const add = async (req, res) => {
   }
 };
 
-// route "/warehouses/:id/inventories"
-// router.route("/:id/inventories").get(warehousesController.warehouseInventory);
-
-
-
+//to get the inventory list of a given warehouse
 const warehouseInventory = async (req, res) => {
   try {
-    const warehouseInventoryFound = await knex("inventories").where({
-      warehouse_id: req.params.id,
-    });
+    const warehouseInventoryFound = await knex("inventories")
+      .select("id", "item_name", "category", "status", "quantity")
+      .where({
+        warehouse_id: req.params.id,
+      });
 
     res.status(200).json(warehouseInventoryFound);
   } catch (error) {
@@ -83,13 +81,14 @@ const warehouseInventory = async (req, res) => {
       .send(`inventory for selected warehouse ${req.params.id} not found`);
   }
 };
-//to edit a warehouse
-
-//to delete a warehouse
 
 module.exports = {
   getWarehouses,
   findOne,
   add,
+<<<<<<< HEAD
+  warehouseInventory,
+=======
   warehouseInventory
+>>>>>>> develop
 };
