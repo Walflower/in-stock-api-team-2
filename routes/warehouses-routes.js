@@ -9,7 +9,7 @@ router
 router.
   route("/:id")
   .get(warehousesController.findOne)
-  .update(warehousesController.update)
+  .patch(warehousesController.update)
 
 // needs .get .post(add) .patch(edit)/.put .delete
 module.exports = router;
