@@ -1,3 +1,5 @@
+const { resolve4 } = require("dns");
+
 const knex = require("knex")(require("../knexfile"));
 
 //to get list of warehouses
@@ -66,6 +68,44 @@ const add = async (req, res) => {
 };
 
 //to edit a warehouse
+const edit = async (req, res) => {
+  try {
+    const {warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email} = req.body
+    const id = parseInt(req.params.id)
+
+    if(!warehouse_name || !address || !city || !country || !contact_name || !contact_position || !contact_phone || !contact_email){
+      return res.status(400).json({
+        message: 'Please ensure that all inputs are complete, even those that will remain the same'
+    })
+    }
+
+    let existingWarehouse = await knex("warehouses").where({id}).first()
+    if(!existingWarehouse) {
+      await knex('warehouses').insert({id, warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email})
+      existingWarehouse = {id, warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email}
+      return res.status(200).json(existingWarehouse)
+    } else {
+      await knex('warehouses').where({id}).update({
+          warehouse_name, 
+          address, 
+          city, 
+          country, 
+          contact_name, 
+          contact_position, 
+          contact_phone, 
+          contact_email
+        })
+      }
+
+  res.status(200).json(existingWarehouse)
+    
+  } catch (error) {
+    console.error('Error updating warehouse:', error)
+    res.status(500).json({
+    message: 'Unable to update selected warehouse'
+    })
+  }
+}
 
 //to delete a warehouse
 const remove = async (req, res) => {
@@ -101,9 +141,29 @@ const remove = async (req, res) => {
 }
  
 
+
+//to get the inventory list of a given warehouse
+const warehouseInventory = async (req, res) => {
+  try {
+    const warehouseInventoryFound = await knex("inventories")
+      .select("id", "item_name", "category", "status", "quantity")
+      .where({
+        warehouse_id: req.params.id,
+      });
+
+    res.status(200).json(warehouseInventoryFound);
+  } catch (error) {
+    res
+      .status(404)
+      .send(`inventory for selected warehouse ${req.params.id} not found`);
+  }
+};
+
 module.exports = {
   getWarehouses,
   findOne,
   add,
   remove,
+  edit,
+  warehouseInventory,
 };

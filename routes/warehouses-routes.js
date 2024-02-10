@@ -10,6 +10,11 @@ router
   .route("/:id")
   .get(warehousesController.findOne)
   .delete(warehousesController.remove)
+router.
+  route("/:id")
+  .get(warehousesController.findOne)
+  .put(warehousesController.edit)
 
+router.route("/:id/inventories").get(warehousesController.warehouseInventory);
 // needs .get .post(add) .patch(edit)/.put .delete
 module.exports = router;
