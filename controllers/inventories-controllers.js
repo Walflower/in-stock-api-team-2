@@ -101,6 +101,66 @@ const createInventoryItem = async (req, res) => {
   }
 };
 
+const update = async (req, res) => {
+  try {
+
+    const inventoryId = req.params.id;
+    const requestedInventory = await knex('inventories').where({id:inventoryId}).first();
+    if(!requestedInventory){
+      return res
+        .status(404)
+        .json({ message: `inventory with ID ${req.params.id} not found` });
+    }
+
+    const { warehouse_id, item_name, description, category, status, quantity } =
+      req.body;
+    if (
+      !warehouse_id ||
+      !item_name ||
+      !description ||
+      !category ||
+      !status ||
+      !quantity
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const requestedWarehouse = await knex("warehouses")
+      .where({
+        id: warehouse_id,
+      })
+      .first();
+
+    if (!requestedWarehouse) {
+      return res
+        .status(400)
+        .json({ message: "Warehouse with the provided ID does not exist" });
+    }
+
+    if (typeof req.body.quantity !== "number") {
+      return res.status(400).json({ message: "Quantity must be a number" });
+    }
+
+    const rowsUpdated = await knex("inventories")
+      .where({ id: inventoryId })
+      .update(req.body);
+    if (rowsUpdated === 0) {
+      return res
+        .status(404)
+        .json({ message: `inventory with ID ${inventoryId} not found` });
+    }
+
+    const updatedUser = await knex("inventories")
+      .where({ id: inventoryId })
+      .first();
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to update user with ID ${req.params.id}: ${error}`,
+    });
+  }
+};
+
 //remove inventory item
 const remove = async (req, res) => {
   try {
@@ -118,15 +178,15 @@ const remove = async (req, res) => {
     res.sendStatus(204);
   } catch (error) {
     res.status(500).json({
-      message: `Unable to delete inventory: ${error}`
+      message: `Unable to delete inventory: ${error}`,
     });
   }
 };
-
 
 module.exports = {
   getInventories,
   createInventoryItem,
   getOne,
   remove,
+  update,
 };
