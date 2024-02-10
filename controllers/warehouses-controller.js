@@ -68,9 +68,28 @@ const add = async (req, res) => {
 //to edit a warehouse
 
 //to delete a warehouse
+const remove = async (req, res) => {
+  try {
+    const warehouseDeleted = await knex("warehouse")
+      .where({id: req.params.id})
+      .delete()
+
+      if (warehouseDeleted === 0) {
+        return res
+        .status(404)
+        .json({message: `Warehouse with Id ${req.params.id} not found`})
+      }
+      res.sendStatus(204)
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to delete warehouse`
+    })
+  }
+}
 
 module.exports = {
   getWarehouses,
   findOne,
   add,
+  remove,
 };

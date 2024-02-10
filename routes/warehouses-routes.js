@@ -6,7 +6,10 @@ router
   .get(warehousesController.getWarehouses)
   .post(warehousesController.add);
 
-router.route("/:id").get(warehousesController.findOne);
+router
+  .route("/:id")
+  .get(warehousesController.findOne)
+  .delete(warehousesController.remove)
 
 // needs .get .post(add) .patch(edit)/.put .delete
 module.exports = router;
