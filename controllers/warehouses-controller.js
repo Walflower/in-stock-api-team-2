@@ -41,7 +41,7 @@ const add = async (req, res) => {
     !req.body.country ||
     !req.body.contact_name ||
     !req.body.contact_position ||
-    !req.body.contract_phone ||
+    !req.body.contact_phone ||
     !req.body.contact_email
   ) {
     return res.status(400).json({
@@ -54,7 +54,7 @@ const add = async (req, res) => {
 
     const newWarehouseId = result[0];
     const createdWarehouse = await knex("warehouses").where({
-      id: newWarehouseId,
+      id: newWarehouseId
     });
 
     res.status(201).json(createdWarehouse);
@@ -70,22 +70,36 @@ const add = async (req, res) => {
 //to delete a warehouse
 const remove = async (req, res) => {
   try {
-    const warehouseDeleted = await knex("warehouse")
-      .where({id: req.params.id})
-      .delete()
 
-      if (warehouseDeleted === 0) {
+    const id = parseInt(req.params.id)
+
+    // const warehouseDeleted = await knex("warehouse")
+    //   .where({id: req.params.id})
+    //   .delete()
+
+      // if (warehouseDeleted === 0) {
+        if (isNaN(id)) {
         return res
         .status(404)
         .json({message: `Warehouse with Id ${req.params.id} not found`})
       }
+
+      const warehouseDeleted = await knex("warehouse")
+      .where({id: id})
+      .del()
+
+      if (warehouseDeleted === 0) {
+        return res.status(404).json({message: `Warehouse with ID ${id} cannot be found`})
+      }
+
       res.sendStatus(204)
   } catch (error) {
     res.status(500).json({
-      message: `Unable to delete warehouse`
+      message: `Unable to delete warehouse: ${error.message}`
     })
   }
 }
+ 
 
 module.exports = {
   getWarehouses,
