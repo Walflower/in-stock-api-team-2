@@ -1,8 +1,5 @@
-const { resolve4 } = require("dns");
-
 const knex = require("knex")(require("../knexfile"));
 
-//to get list of warehouses
 const getWarehouses = async (_req, res) => {
   try {
     const data = await knex("warehouses")
@@ -25,7 +22,6 @@ const getWarehouses = async (_req, res) => {
   }
 };
 
-//to get a single warehouse
 const findOne = async (req, res) => {
   try {
     const warehousesFound = await knex("warehouses").where({
@@ -47,7 +43,6 @@ const findOne = async (req, res) => {
   }
 };
 
-//to add a new warehouse
 const add = async (req, res) => {
   const {
     warehouse_name,
@@ -113,7 +108,6 @@ const add = async (req, res) => {
   }
 };
 
-//to edit a warehouse
 const edit = async (req, res) => {
   try {
     const {
@@ -189,9 +183,8 @@ const edit = async (req, res) => {
       message: "Unable to update selected warehouse",
     });
   }
-}
+};
 
-//delete a warehouse
 const remove = async (req, res) => {
   try {
     const rowsDeleted = await knex("warehouses")
@@ -204,18 +197,14 @@ const remove = async (req, res) => {
         .json({ message: `Warehouse with ID ${req.params.id} not found` });
     }
 
-    // No Content response
     res.sendStatus(204);
   } catch (error) {
     res.status(500).json({
-      message: `Unable to delete inventory: ${error}`
+      message: `Unable to delete inventory: ${error}`,
     });
   }
 };
- 
 
-
-//to get the inventory list of a given warehouse
 const warehouseInventory = async (req, res) => {
   try {
     const warehouseInventoryFound = await knex("inventories")

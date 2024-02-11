@@ -21,7 +21,6 @@ const getInventories = async (_req, res) => {
   }
 };
 
-//to get a single inventory item
 const getOne = async (req, res) => {
   try {
     const inventoryItemFound = await knex("inventories").where({
@@ -43,7 +42,6 @@ const getOne = async (req, res) => {
   }
 };
 
-//to post a new inventory item
 const createInventoryItem = async (req, res) => {
   const { warehouse_id, item_name, description, category, status, quantity } =
     req.body;
@@ -103,10 +101,11 @@ const createInventoryItem = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-
     const inventoryId = req.params.id;
-    const requestedInventory = await knex('inventories').where({id:inventoryId}).first();
-    if(!requestedInventory){
+    const requestedInventory = await knex("inventories")
+      .where({ id: inventoryId })
+      .first();
+    if (!requestedInventory) {
       return res
         .status(404)
         .json({ message: `inventory with ID ${req.params.id} not found` });
@@ -161,7 +160,6 @@ const update = async (req, res) => {
   }
 };
 
-//remove inventory item
 const remove = async (req, res) => {
   try {
     const rowsDeleted = await knex("inventories")
@@ -174,7 +172,6 @@ const remove = async (req, res) => {
         .json({ message: `Inventory with ID ${req.params.id} not found` });
     }
 
-    // No Content response
     res.sendStatus(204);
   } catch (error) {
     res.status(500).json({
