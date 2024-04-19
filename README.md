@@ -13,7 +13,6 @@ Instock is a full-stack React application developed by a team of three developer
 - Figma
 - HTML5
 - CSS3
-- Agile
 
 ## Project Overview
 Instock provides a comprehensive CMS for warehouse inventory management. The team utilized separate branches for each app feature and incorporated all API documentation types (GET, PUT, POST, DELETE). Mockups from Figma were used as a reference for task allocation and development.
@@ -25,6 +24,11 @@ Instock provides a comprehensive CMS for warehouse inventory management. The tea
 - **API Integration:** Utilized various API endpoints for data management.
 - **Collaborative Development:** Team effort in designing and implementing features.
 - **Daily Stand-ups:** Mimicked a real work environment for effective communication and progress tracking.
+## Demo
+![instock1](https://github.com/Walflower/in-stock-api-team-2/assets/127899172/67a20359-12d3-4557-9fca-3f24dc90e40b)
+![instock2](https://github.com/Walflower/in-stock-api-team-2/assets/127899172/dbae3b42-2427-4f52-8af5-fdd22947e6e6)
+![instock3](https://github.com/Walflower/in-stock-api-team-2/assets/127899172/6e1f7eed-6735-4187-98d6-8183b9479a11)
+![instock4](https://github.com/Walflower/in-stock-api-team-2/assets/127899172/c7dc2341-4e7c-463e-9292-622f666a1526)
 
 ## How to View Live
 To view the live version of Instock, follow these steps:
