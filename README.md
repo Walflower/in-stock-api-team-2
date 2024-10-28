@@ -36,5 +36,6 @@ To view the live version of Instock, follow these steps:
 2. Navigate to the project directory.
 3. Run the server-side code using `npm start` in the terminal.
 4. Open the provided URL in your browser to access the live application.
+5. Go to Front end repository [https://github.com/Walflower/in-stock-team-2.git](https://github.com/Walflower/in-stock-team-2.git) and follow README instructions.
 
 This project showcases the team's proficiency in React, Express, API integration, Agile methodologies, and collaborative development practices. It serves as a testament to effective teamwork and technical skills in building complex web applications.
